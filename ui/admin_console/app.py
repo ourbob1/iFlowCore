@@ -16,7 +16,7 @@ Pages
   Choose password   forced after a temporary password (first sign-in or an admin reset)
   Console           a navigation rail with only the pages your role allows:
                     Overview · Users · Licenses & revenue · Parser Studio · Crash reports ·
-                    System health · Audit trail · My account
+                    System health · Audit trail · Advertisers · My account
 
 Data sovereignty
 ----------------
@@ -43,6 +43,7 @@ from ui.viewmodels import admin as vm
 from ui.views import admin as sections
 from ui.views.admin_parser_studio import studio_page
 from ui.views.admin_users import PERMISSION_LABELS, users_page
+from ui.views.admin_advertisers import advertisers_page
 from ui.views.base import ViewContext
 from ui.admin_console.local_service import LocalService, LocalServiceError, PublishingSettings
 
@@ -65,6 +66,7 @@ PAGES: tuple[Page, ...] = (
     Page("users", "Users", "GROUP_OUTLINED", "users.manage", ("users",)),
     Page("licenses", "Licenses & revenue", "KEY_OUTLINED", "licenses.read", ("licenses", "revenue")),
     Page("parsers", "Parser Studio", "DATA_OBJECT", "parsers.edit", ("parsers",)),
+    Page("advertisers", "Advertisers", "CAMPAIGN", "advertisers.manage", ("advertisers",)),
     Page("telemetry", "Crash reports", "BUG_REPORT_OUTLINED", "telemetry.read", ("telemetry",)),
     Page("health", "System health", "MONITOR_HEART_OUTLINED", "health.read", ("health",)),
     Page("audit", "Audit trail", "HISTORY", "audit.read", ("audit",)),
@@ -73,10 +75,10 @@ PAGES: tuple[Page, ...] = (
 # what each section loads, and what it needs to be shown
 SECTION_DATA = {"overview": ("overview",), "health": ("health",), "audit": ("audit",), "users": ("users",),
                 "licenses": ("plans", "licenses"), "revenue": ("revenue",), "parsers": ("parsers", "integrations"),
-                "telemetry": ("issues",), "account": ()}
+                "advertisers": ("advertisers",), "telemetry": ("issues",), "account": ()}
 SECTION_PERMISSION = {"health": "health.read", "audit": "audit.read", "users": "users.manage",
                       "licenses": "licenses.read", "revenue": "licenses.read", "parsers": "parsers.edit",
-                      "telemetry": "telemetry.read"}
+                      "advertisers": "advertisers.manage", "telemetry": "telemetry.read"}
 
 
 def visible_pages(s: vm.AdminSession) -> list[Page]:
@@ -441,7 +443,7 @@ class AdminConsoleApp:
             "notice": sections.notice_banner, "overview": sections.overview_row, "health": sections.health_card,
             "audit": sections.audit_card, "licenses": sections.license_card, "revenue": sections.revenue_card,
             "telemetry": sections.telemetry_card, "users": users_page, "parsers": studio_page,
-            "account": self.account_section,
+            "advertisers": advertisers_page, "account": self.account_section,
         }
         names = ["notice"] + [n for n in page.sections if s.can(SECTION_PERMISSION.get(n))]
         self.slots = {}
