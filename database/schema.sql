@@ -1,7 +1,7 @@
 -- Third-party Vendor Advertising Management Schema
 
 CREATE TABLE IF NOT EXISTS advertisers (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     company_name TEXT NOT NULL,
     contact_email TEXT NOT NULL,
     industry TEXT NOT NULL,
@@ -16,7 +16,7 @@ CREATE INDEX IF NOT EXISTS idx_advertisers_status ON advertisers(status);
 CREATE INDEX IF NOT EXISTS idx_advertisers_industry ON advertisers(industry);
 
 CREATE TABLE IF NOT EXISTS ads (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     advertiser_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     verbiage TEXT NOT NULL,
@@ -31,7 +31,7 @@ CREATE INDEX IF NOT EXISTS idx_ads_advertiser_id ON ads(advertiser_id);
 CREATE INDEX IF NOT EXISTS idx_ads_is_active ON ads(is_active);
 
 CREATE TABLE IF NOT EXISTS ad_analytics (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     ad_id INTEGER NOT NULL,
     event_type TEXT NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
