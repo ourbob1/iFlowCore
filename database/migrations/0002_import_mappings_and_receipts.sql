@@ -4,6 +4,14 @@
 -- touch triggers).
 -- =============================================================================
 
+CREATE TABLE IF NOT EXISTS transactions (
+    id TEXT PRIMARY KEY NOT NULL,
+    date TEXT NOT NULL,
+    amount_minor INTEGER NOT NULL,
+    description TEXT,
+    category TEXT,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+);
 
 -- -----------------------------------------------------------------------------
 -- import_mappings: user-editable column mappings for statement ingestion.
