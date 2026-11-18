@@ -87,42 +87,30 @@ CREATE INDEX ix_receipts_sync_pending ON receipts (updated_at) WHERE sync_status
 
 
 -- ---- triggers (same pattern as schema.sql) ----------------------------------
-CREATE TRIGGER IF NOT EXISTS trg_import_mappings_immutable
-BEFORE UPDATE OF id, created_at ON import_mappings
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'import_mappings: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_import_mappings_immutable BEFORE UPDATE OF id, created_at ON import_mappings
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'import_mappings: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_import_mappings_touch
-AFTER UPDATE ON import_mappings
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_import_mappings_touch AFTER UPDATE ON import_mappings
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE import_mappings
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = OLD.id;
+     WHERE id = NEW.id;
 END;
 
-CREATE TRIGGER IF NOT EXISTS trg_receipts_immutable
-BEFORE UPDATE OF id, created_at ON receipts
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'receipts: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_receipts_immutable BEFORE UPDATE OF id, created_at ON receipts
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'receipts: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_receipts_touch
-AFTER UPDATE ON receipts
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_receipts_touch AFTER UPDATE ON receipts
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE receipts
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = OLD.id;
+     WHERE id = NEW.id;
 END;
