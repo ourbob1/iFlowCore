@@ -204,7 +204,7 @@ CREATE UNIQUE INDEX ux_mileage_one_active_trip ON mileage_logs (ifnull(vehicle_i
 -- ---- triggers (same pattern as schema.sql) ----------------------------------
 
 CREATE TRIGGER trg_vehicles_immutable BEFORE UPDATE OF id, created_at ON vehicles
-WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
+WHEN NEW.id <> OLD.id OR NEW.created_at <> OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'vehicles: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_vehicles_touch AFTER UPDATE ON vehicles
@@ -214,12 +214,12 @@ BEGIN
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_vehicle_assignments_immutable BEFORE UPDATE OF id, created_at ON vehicle_assignments
-WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
+WHEN NEW.id <> OLD.id OR NEW.created_at <> OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'vehicle_assignments: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_vehicle_assignments_touch AFTER UPDATE ON vehicle_assignments
@@ -229,12 +229,12 @@ BEGIN
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_fuel_logs_immutable BEFORE UPDATE OF id, created_at ON fuel_logs
-WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
+WHEN NEW.id <> OLD.id OR NEW.created_at <> OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'fuel_logs: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_fuel_logs_touch AFTER UPDATE ON fuel_logs
@@ -244,12 +244,12 @@ BEGIN
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_maintenance_schedules_immutable BEFORE UPDATE OF id, created_at ON maintenance_schedules
-WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
+WHEN NEW.id <> OLD.id OR NEW.created_at <> OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'maintenance_schedules: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_maintenance_schedules_touch AFTER UPDATE ON maintenance_schedules
@@ -259,12 +259,12 @@ BEGIN
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_maintenance_records_immutable BEFORE UPDATE OF id, created_at ON maintenance_records
-WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
+WHEN NEW.id <> OLD.id OR NEW.created_at <> OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'maintenance_records: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_maintenance_records_touch AFTER UPDATE ON maintenance_records
@@ -274,5 +274,5 @@ BEGIN
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
