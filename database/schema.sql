@@ -1,5 +1,14 @@
 -- Third-party Vendor Advertising Management Schema
 
+CREATE TABLE IF NOT EXISTS transactions (
+    id TEXT PRIMARY KEY NOT NULL,
+    date TEXT NOT NULL,
+    amount_minor INTEGER NOT NULL,
+    description TEXT,
+    category TEXT,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+);
+
 CREATE TABLE IF NOT EXISTS advertisers (
     id INTEGER PRIMARY KEY,
     company_name TEXT NOT NULL,
