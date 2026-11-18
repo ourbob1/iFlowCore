@@ -203,111 +203,76 @@ CREATE UNIQUE INDEX ux_mileage_one_active_trip ON mileage_logs (ifnull(vehicle_i
 
 -- ---- triggers (same pattern as schema.sql) ----------------------------------
 
-CREATE TRIGGER IF NOT EXISTS trg_vehicles_immutable
-BEFORE UPDATE OF id, created_at ON vehicles
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'vehicles: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_vehicles_immutable BEFORE UPDATE OF id, created_at ON vehicles
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'vehicles: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_vehicles_touch
-AFTER UPDATE ON vehicles
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_vehicles_touch AFTER UPDATE ON vehicles
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE vehicles
-    SET
-        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
-        version = OLD.version + 1,
-        sync_status = 'pending'
-    WHERE id = OLD.id;
+       SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
+           version = OLD.version + 1,
+           sync_status = 'pending'
+     WHERE id = OLD.id;
 END;
 
 
-CREATE TRIGGER IF NOT EXISTS trg_vehicle_assignments_immutable
-BEFORE UPDATE OF id, created_at ON vehicle_assignments
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'vehicle_assignments: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_vehicle_assignments_immutable BEFORE UPDATE OF id, created_at ON vehicle_assignments
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'vehicle_assignments: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_vehicle_assignments_touch
-AFTER UPDATE ON vehicle_assignments
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_vehicle_assignments_touch AFTER UPDATE ON vehicle_assignments
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE vehicle_assignments
-    SET
-        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
-        version = OLD.version + 1,
-        sync_status = 'pending'
-    WHERE id = OLD.id;
+       SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
+           version = OLD.version + 1,
+           sync_status = 'pending'
+     WHERE id = OLD.id;
 END;
 
 
-CREATE TRIGGER IF NOT EXISTS trg_fuel_logs_immutable
-BEFORE UPDATE OF id, created_at ON fuel_logs
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'fuel_logs: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_fuel_logs_immutable BEFORE UPDATE OF id, created_at ON fuel_logs
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'fuel_logs: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_fuel_logs_touch
-AFTER UPDATE ON fuel_logs
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_fuel_logs_touch AFTER UPDATE ON fuel_logs
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE fuel_logs
-    SET
-        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
-        version = OLD.version + 1,
-        sync_status = 'pending'
-    WHERE id = OLD.id;
+       SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
+           version = OLD.version + 1,
+           sync_status = 'pending'
+     WHERE id = OLD.id;
 END;
 
 
-CREATE TRIGGER IF NOT EXISTS trg_maintenance_schedules_immutable
-BEFORE UPDATE OF id, created_at ON maintenance_schedules
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'maintenance_schedules: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_maintenance_schedules_immutable BEFORE UPDATE OF id, created_at ON maintenance_schedules
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'maintenance_schedules: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_maintenance_schedules_touch
-AFTER UPDATE ON maintenance_schedules
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_maintenance_schedules_touch AFTER UPDATE ON maintenance_schedules
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE maintenance_schedules
-    SET
-        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
-        version = OLD.version + 1,
-        sync_status = 'pending'
-    WHERE id = OLD.id;
+       SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
+           version = OLD.version + 1,
+           sync_status = 'pending'
+     WHERE id = OLD.id;
 END;
 
 
-CREATE TRIGGER IF NOT EXISTS trg_maintenance_records_immutable
-BEFORE UPDATE OF id, created_at ON maintenance_records
-FOR EACH ROW
-WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
-BEGIN
-    SELECT RAISE(ABORT, 'maintenance_records: id and created_at are immutable');
-END;
+CREATE TRIGGER trg_maintenance_records_immutable BEFORE UPDATE OF id, created_at ON maintenance_records
+WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'maintenance_records: id and created_at are immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS trg_maintenance_records_touch
-AFTER UPDATE ON maintenance_records
-FOR EACH ROW
-WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
+CREATE TRIGGER trg_maintenance_records_touch AFTER UPDATE ON maintenance_records
+WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
 BEGIN
     UPDATE maintenance_records
-    SET
-        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
-        version = OLD.version + 1,
-        sync_status = 'pending'
-    WHERE id = OLD.id;
+       SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
+           version = OLD.version + 1,
+           sync_status = 'pending'
+     WHERE id = OLD.id;
 END;
