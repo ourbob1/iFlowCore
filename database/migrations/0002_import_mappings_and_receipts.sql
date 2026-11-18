@@ -24,11 +24,11 @@ CREATE TABLE import_mappings (
                               substr(lower(hex(randomblob(2))), 2) || '-' ||
                               substr('89ab', 1 + (abs(random()) % 4), 1) ||
                               substr(lower(hex(randomblob(2))), 2) || '-' || lower(hex(randomblob(6)))),
-    name                  TEXT NOT NULL CHECK (length(trim(name)) BETWEEN 1 AND 120),
+    name                  TEXT NOT NULL CHECK (length(trim(name)) >= 1 AND length(trim(name)) <= 120),
     platform_id           TEXT REFERENCES platforms (id) ON UPDATE RESTRICT ON DELETE SET NULL,
     source_format         TEXT NOT NULL CHECK (source_format IN ('csv', 'pdf')),
     mapping_version       INTEGER NOT NULL DEFAULT 1 CHECK (mapping_version >= 1),
-    mapping_json          TEXT NOT NULL CHECK (json_valid(mapping_json)),
+    mapping_json          TEXT NOT NULL CHECK (json_valid(mapping_json) = 1),
 
     created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
     updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
@@ -87,30 +87,42 @@ CREATE INDEX ix_receipts_sync_pending ON receipts (updated_at) WHERE sync_status
 
 
 -- ---- triggers (same pattern as schema.sql) ----------------------------------
-CREATE TRIGGER trg_import_mappings_immutable BEFORE UPDATE OF id, created_at ON import_mappings
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
-BEGIN SELECT RAISE(ABORT, 'import_mappings: id and created_at are immutable'); END;
+CREATE TRIGGER IF NOT EXISTS trg_import_mappings_immutable
+BEFORE UPDATE OF id, created_at ON import_mappings
+FOR EACH ROW
+WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
+BEGIN
+    SELECT RAISE(ABORT, 'import_mappings: id and created_at are immutable');
+END;
 
-CREATE TRIGGER trg_import_mappings_touch AFTER UPDATE ON import_mappings
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+CREATE TRIGGER IF NOT EXISTS trg_import_mappings_touch
+AFTER UPDATE ON import_mappings
+FOR EACH ROW
+WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
 BEGIN
     UPDATE import_mappings
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
-CREATE TRIGGER trg_receipts_immutable BEFORE UPDATE OF id, created_at ON receipts
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
-BEGIN SELECT RAISE(ABORT, 'receipts: id and created_at are immutable'); END;
+CREATE TRIGGER IF NOT EXISTS trg_receipts_immutable
+BEFORE UPDATE OF id, created_at ON receipts
+FOR EACH ROW
+WHEN (NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at)
+BEGIN
+    SELECT RAISE(ABORT, 'receipts: id and created_at are immutable');
+END;
 
-CREATE TRIGGER trg_receipts_touch AFTER UPDATE ON receipts
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+CREATE TRIGGER IF NOT EXISTS trg_receipts_touch
+AFTER UPDATE ON receipts
+FOR EACH ROW
+WHEN (NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status)
 BEGIN
     UPDATE receipts
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
