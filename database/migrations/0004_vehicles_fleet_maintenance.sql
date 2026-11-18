@@ -5,6 +5,8 @@
 -- money in minor units, shares in basis points.
 -- =============================================================================
 
+CREATE TABLE IF NOT EXISTS mileage_logs (id TEXT PRIMARY KEY NOT NULL, started_at TEXT NOT NULL, ended_at TEXT, distance_m INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')), deleted_at TEXT);
+
 -- vehicles: one row per car/bike/scooter the user works with
 CREATE TABLE vehicles (
     id                    TEXT PRIMARY KEY NOT NULL DEFAULT (
