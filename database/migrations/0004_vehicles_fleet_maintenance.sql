@@ -15,7 +15,7 @@ CREATE TABLE vehicles (
                               substr('89ab', 1 + (abs(random()) % 4), 1) ||
                               substr(lower(hex(randomblob(2))), 2) || '-' || lower(hex(randomblob(6)))),
 
-    nickname              TEXT NOT NULL CHECK (length(trim(nickname)) BETWEEN 1 AND 60),
+    nickname              TEXT NOT NULL CHECK (length(trim(nickname)) >= 1 AND length(trim(nickname)) <= 60),
     vin                   TEXT CHECK (vin IS NULL OR (length(vin) = 17 AND vin = upper(vin))),
     vehicle_type          TEXT NOT NULL DEFAULT 'car' CHECK (vehicle_type IN ('car', 'truck', 'van', 'motorcycle', 'scooter', 'bicycle', 'ebike', 'other')),
     year                  INTEGER CHECK (year IS NULL OR year BETWEEN 1900 AND 2100),
@@ -25,7 +25,7 @@ CREATE TABLE vehicles (
     style_id              TEXT,
     fuel_type             TEXT CHECK (fuel_type IS NULL OR fuel_type IN ('gasoline', 'diesel', 'hybrid', 'plug_in_hybrid', 'electric', 'flex_fuel', 'hydrogen', 'other', 'none')),
     rated_mpg_combined    INTEGER CHECK (rated_mpg_combined IS NULL OR rated_mpg_combined > 0),
-    equipment_json        TEXT NOT NULL DEFAULT '[]' CHECK (json_valid(equipment_json)),
+    equipment_json        TEXT NOT NULL DEFAULT '[]' CHECK (json_valid(equipment_json) = 1),
     odometer_m            INTEGER NOT NULL DEFAULT 0 CHECK (odometer_m >= 0),
     odometer_updated_at   TEXT,
     baseline_odometer_m   INTEGER NOT NULL DEFAULT 0 CHECK (baseline_odometer_m >= 0),   -- odometer when tracking began
@@ -33,7 +33,7 @@ CREATE TABLE vehicles (
     placed_in_service_on  TEXT CHECK (placed_in_service_on IS NULL OR date(placed_in_service_on) IS NOT NULL),
     purchase_price_minor  INTEGER CHECK (purchase_price_minor IS NULL OR purchase_price_minor >= 0),
     currency              TEXT NOT NULL DEFAULT 'USD' CHECK (length(currency) = 3 AND currency = upper(currency)),
-    business_use_bp       INTEGER NOT NULL DEFAULT 10000 CHECK (business_use_bp BETWEEN 0 AND 10000),
+    business_use_bp       INTEGER NOT NULL DEFAULT 10000 CHECK (business_use_bp >= 0 AND business_use_bp <= 10000),
     deduction_method      TEXT NOT NULL DEFAULT 'standard_mileage' CHECK (deduction_method IN ('standard_mileage', 'actual')),
     severe_service        INTEGER NOT NULL DEFAULT 1 CHECK (severe_service IN (0, 1)),
     is_active             INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
@@ -204,75 +204,75 @@ CREATE UNIQUE INDEX ux_mileage_one_active_trip ON mileage_logs (ifnull(vehicle_i
 -- ---- triggers (same pattern as schema.sql) ----------------------------------
 
 CREATE TRIGGER trg_vehicles_immutable BEFORE UPDATE OF id, created_at ON vehicles
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'vehicles: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_vehicles_touch AFTER UPDATE ON vehicles
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+WHEN NEW.updated_at = OLD.updated_at AND NEW.sync_status = OLD.sync_status
 BEGIN
     UPDATE vehicles
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_vehicle_assignments_immutable BEFORE UPDATE OF id, created_at ON vehicle_assignments
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'vehicle_assignments: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_vehicle_assignments_touch AFTER UPDATE ON vehicle_assignments
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+WHEN NEW.updated_at = OLD.updated_at AND NEW.sync_status = OLD.sync_status
 BEGIN
     UPDATE vehicle_assignments
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_fuel_logs_immutable BEFORE UPDATE OF id, created_at ON fuel_logs
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'fuel_logs: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_fuel_logs_touch AFTER UPDATE ON fuel_logs
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+WHEN NEW.updated_at = OLD.updated_at AND NEW.sync_status = OLD.sync_status
 BEGIN
     UPDATE fuel_logs
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_maintenance_schedules_immutable BEFORE UPDATE OF id, created_at ON maintenance_schedules
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'maintenance_schedules: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_maintenance_schedules_touch AFTER UPDATE ON maintenance_schedules
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+WHEN NEW.updated_at = OLD.updated_at AND NEW.sync_status = OLD.sync_status
 BEGIN
     UPDATE maintenance_schedules
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
 
 
 CREATE TRIGGER trg_maintenance_records_immutable BEFORE UPDATE OF id, created_at ON maintenance_records
-WHEN NEW.id IS NOT OLD.id OR NEW.created_at IS NOT OLD.created_at
+WHEN NEW.id != OLD.id OR NEW.created_at != OLD.created_at
 BEGIN SELECT RAISE(ABORT, 'maintenance_records: id and created_at are immutable'); END;
 
 CREATE TRIGGER trg_maintenance_records_touch AFTER UPDATE ON maintenance_records
-WHEN NEW.updated_at IS OLD.updated_at AND NEW.sync_status IS OLD.sync_status
+WHEN NEW.updated_at = OLD.updated_at AND NEW.sync_status = OLD.sync_status
 BEGIN
     UPDATE maintenance_records
        SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
            version = OLD.version + 1,
            sync_status = 'pending'
-     WHERE id = NEW.id;
+     WHERE id = OLD.id;
 END;
