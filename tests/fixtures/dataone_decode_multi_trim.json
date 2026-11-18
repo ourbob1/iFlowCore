@@ -1,0 +1,59 @@
+{
+  "decoder_messages": {
+    "service_provider": "DataOne Software, Inc.",
+    "decoder_version": "7.2.0",
+    "decoder_errors": []
+  },
+  "query_responses": {
+    "iFlowCore-1": {
+      "query_error": {"error_code": "", "error_message": ""},
+      "us_market_data": {
+        "common_us_data": {
+          "basic_data": {"market": "US", "year": "2019", "make": "Toyota", "model": "Camry", "body_type": "Sedan", "doors": "4", "drive_type": "FWD", "fuel_type": "Gasoline"},
+          "engines": [{"name": "2.5L I4", "cylinders": "4", "displacement": "2.5", "fuel_type": "Gasoline", "installed": "Y"}],
+          "maintenance": [
+            {"service": "Engine oil & filter", "category": "Engine", "interval_miles": "10000", "interval_months": "12", "severe_interval_miles": "5000", "severe_interval_months": "6"},
+            {"service": "Rotate tires", "category": "Tires", "interval_miles": "5000"},
+            {"service": "Cabin air filter", "category": "HVAC", "interval_miles": "30000", "interval_months": "36"},
+            {"service": "Inspect wipers", "category": "Body"}
+          ]
+        },
+        "us_styles": [
+          {
+            "id": "401738771",
+            "name": "LE 4dr Sedan (2.5L 4cyl 8A)",
+            "basic_data": {"trim": "LE", "seating": "5"},
+            "pricing": {"msrp": "$24,425", "invoice_price": "$22,470"},
+            "fuel_efficiency": [{"city": "29", "highway": "41", "combined": "34"}],
+            "installed_equipment": [
+              {"category": "Safety", "name": "Pre-Collision System w/ Pedestrian Detection", "value": "Standard"},
+              {"category": "Safety", "name": "Lane Departure Alert w/ Steering Assist", "value": "Standard"},
+              {"category": "Safety", "name": "Dynamic Radar Cruise Control", "value": "Standard"},
+              {"category": "Safety", "name": "Blind Spot Monitor", "value": "No"},
+              {"category": "Convenience", "name": "Backup camera", "value": "Standard"},
+              {"category": "Entertainment", "name": "Apple CarPlay", "value": "N/A"},
+              {"category": "Entertainment", "name": "Bluetooth wireless", "value": "Standard"}
+            ]
+          },
+          {
+            "id": "401738775",
+            "name": "XLE 4dr Sedan (2.5L 4cyl 8A)",
+            "basic_data": {"trim": "XLE", "seating": "5"},
+            "pricing": {"msrp": "$29,000"},
+            "fuel_efficiency": [{"city": "28", "highway": "39", "combined": "32"}],
+            "installed_equipment": [
+              {"category": "Safety", "equipment": [
+                {"name": "Pre-Collision System w/ Pedestrian Detection", "value": "Standard"},
+                {"name": "Blind Spot Monitor w/ Rear Cross-Traffic Alert", "value": "Standard"},
+                {"name": "Dynamic Radar Cruise Control", "value": "Standard"}
+              ]},
+              {"category": "Seats", "name": "Leather-trimmed heated front seats", "value": "Standard"},
+              {"category": "Roof", "name": "Power tilt/slide moonroof", "value": "Standard"},
+              {"category": "Convenience", "name": "Backup camera", "value": "Standard"}
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

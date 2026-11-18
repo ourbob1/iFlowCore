@@ -1,0 +1,19 @@
+{
+  "jurisdiction": "US-PA",
+  "tax_year": 2025,
+  "currency": "USD",
+  "kind": "progressive",
+  "source": "Pennsylvania flat rate 3.07% (72 P.S. 7302)",
+  "notes": "PA taxes net profits by income class; no standard deduction.",
+  "standard_deduction": {
+    "default": 0
+  },
+  "brackets": {
+    "*": [
+      [
+        0,
+        307
+      ]
+    ]
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "jurisdiction": "US",
+  "tax_year": 2026,
+  "currency": "USD",
+  "kind": "progressive",
+  "source": "IRS Rev. Proc. 2025-32; SSA 2026 COLA fact sheet (wage base); IRS mileage announcements (72.5c Jan-Jun, 76c from 2026-07-01)",
+  "notes": "QBI modeled for a non-SSTB sole proprietor with no W-2 wages/UBIA; OBBBA $400 minimum deduction applied when QBI >= $1,000.",
+  "standard_deduction": {
+    "single": 1610000,
+    "married_joint": 3220000,
+    "married_separate": 1610000,
+    "head_of_household": 2415000,
+    "qualifying_surviving_spouse": 3220000
+  },
+  "brackets": {
+    "single": [
+      [
+        0,
+        1000
+      ],
+      [
+        1240000,
+        1200
+      ],
+      [
+        5040000,
+        2200
+      ],
+      [
+        10570000,
+        2400
+      ],
+      [
+        20177500,
+        3200
+      ],
+      [
+        25622500,
+        3500
+      ],
+      [
+        64060000,
+        3700
+      ]
+    ],
+    "married_joint": [
+      [
+        0,
+        1000
+      ],
+      [
+        2480000,
+        1200
+      ],
+      [
+        10080000,
+        2200
+      ],
+      [
+        21140000,
+        2400
+      ],
+      [
+        40355000,
+        3200
+      ],
+      [
+        51245000,
+        3500
+      ],
+      [
+        76870000,
+        3700
+      ]
+    ],
+    "married_separate": [
+      [
+        0,
+        1000
+      ],
+      [
+        1240000,
+        1200
+      ],
+      [
+        5040000,
+        2200
+      ],
+      [
+        10570000,
+        2400
+      ],
+      [
+        20177500,
+        3200
+      ],
+      [
+        25622500,
+        3500
+      ],
+      [
+        38435000,
+        3700
+      ]
+    ],
+    "head_of_household": [
+      [
+        0,
+        1000
+      ],
+      [
+        1770000,
+        1200
+      ],
+      [
+        6745000,
+        2200
+      ],
+      [
+        10570000,
+        2400
+      ],
+      [
+        20175000,
+        3200
+      ],
+      [
+        25620000,
+        3500
+      ],
+      [
+        64060000,
+        3700
+      ]
+    ],
+    "qualifying_surviving_spouse": [
+      [
+        0,
+        1000
+      ],
+      [
+        2480000,
+        1200
+      ],
+      [
+        10080000,
+        2200
+      ],
+      [
+        21140000,
+        2400
+      ],
+      [
+        40355000,
+        3200
+      ],
+      [
+        51245000,
+        3500
+      ],
+      [
+        76870000,
+        3700
+      ]
+    ]
+  },
+  "self_employment": {
+    "net_earnings_factor_bp": 9235,
+    "social_security_rate_bp": 1240,
+    "medicare_rate_bp": 290,
+    "social_security_wage_base": 18450000,
+    "minimum_net_earnings": 40000,
+    "additional_medicare_rate_bp": 90,
+    "additional_medicare_threshold": {
+      "single": 20000000,
+      "married_joint": 25000000,
+      "married_separate": 12500000,
+      "head_of_household": 20000000,
+      "qualifying_surviving_spouse": 20000000
+    }
+  },
+  "qbi": {
+    "rate_bp": 2000,
+    "threshold": {
+      "married_joint": 40350000,
+      "married_separate": 20177500,
+      "default": 20175000
+    },
+    "phase_in_range": {
+      "married_joint": 15000000,
+      "default": 7500000
+    },
+    "minimum_deduction": 40000,
+    "minimum_qbi_for_minimum": 100000
+  },
+  "mileage_rates": [
+    {
+      "effective_from": "2026-01-01",
+      "rate_per_mile_deci_minor": 725
+    },
+    {
+      "effective_from": "2026-07-01",
+      "rate_per_mile_deci_minor": 760
+    }
+  ],
+  "mileage_depreciation_rates": [
+    {
+      "effective_from": "2026-01-01",
+      "rate_per_mile_deci_minor": 350
+    }
+  ],
+  "passenger_auto_depreciation_limits": {
+    "placed_in_service_year": 2026,
+    "no_bonus": [
+      1230000,
+      1980000,
+      1190000,
+      716000
+    ],
+    "bonus": [
+      2030000,
+      1980000,
+      1190000,
+      716000
+    ],
+    "source": "Rev. Proc. 2026-15; Notice 2026-10 (basis reduction 35c/mi for 2026)"
+  }
+}

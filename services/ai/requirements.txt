@@ -1,0 +1,14 @@
+# iFlow Core AI service. torch is installed separately from the CPU wheel index
+# (see Dockerfile) so the image doesn't pull ~2 GB of CUDA libraries.
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+pydantic>=2.7,<3.0
+transformers>=4.50,<5.0
+accelerate>=1.0,<2.0
+huggingface_hub>=0.26,<1.0
+pillow>=10.4,<13.0
+pillow-heif>=0.18,<2.0
+pypdfium2>=4.30,<5.0
+pytesseract>=0.3.13,<0.4
+argon2-cffi>=23.1,<26            # Admin Console passwords (Argon2id)
+boto3>=1.34,<2.0                 # statement-format CDN uploads (S3), only with RS_AI_FORMATS_BUCKET

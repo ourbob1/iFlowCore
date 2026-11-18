@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local databases & preferences — never commit user financial data
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+preferences.json
+_build_info.json
+.aider*

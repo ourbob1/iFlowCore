@@ -1,0 +1,50 @@
+# iFlow Core AI service + Caddy (automatic HTTPS via Let's Encrypt).
+#   cp .env.example .env   # fill in RS_AI_DOMAIN, ACME_EMAIL, RS_AI_TOKENS, RS_AI_ADMIN_TOKEN
+#   docker compose up -d --build
+services:
+  ai:
+    build:
+      context: .
+      args:
+        OCR_LANGS: ${OCR_LANGS:-eng}
+    image: iflow-ai:latest
+    env_file: .env
+    restart: unless-stopped
+    expose: ["8080"]            # only Caddy talks to it; never publish this port
+    volumes:
+      - models:/models          # Hugging Face cache (downloaded once)
+      - data:/data              # telemetry.db
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    mem_limit: ${AI_MEM_LIMIT:-10g}
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+
+  caddy:
+    image: caddy:2.10
+    restart: unless-stopped
+    depends_on: [ai]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      RS_AI_DOMAIN: ${RS_AI_DOMAIN:?set RS_AI_DOMAIN in .env}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+
+volumes:
+  models:
+  data:
+  caddy_data:
+  caddy_config:

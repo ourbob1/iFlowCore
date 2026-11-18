@@ -1,0 +1,16 @@
+{
+  "kind": "none",
+  "jurisdictions": [
+    "US-AK",
+    "US-FL",
+    "US-NV",
+    "US-NH",
+    "US-SD",
+    "US-TN",
+    "US-TX",
+    "US-WA",
+    "US-WY"
+  ],
+  "source": "States without a broad-based tax on wage/self-employment income",
+  "notes": "WA taxes certain capital gains and NH repealed its interest/dividends tax from 2025; neither applies to gig earnings."
+}

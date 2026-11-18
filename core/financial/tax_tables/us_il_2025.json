@@ -1,0 +1,19 @@
+{
+  "jurisdiction": "US-IL",
+  "tax_year": 2025,
+  "currency": "USD",
+  "kind": "progressive",
+  "source": "Illinois flat rate 4.95% (35 ILCS 5/201)",
+  "notes": "Personal exemption allowance not modeled.",
+  "standard_deduction": {
+    "default": 0
+  },
+  "brackets": {
+    "*": [
+      [
+        0,
+        495
+      ]
+    ]
+  }
+}

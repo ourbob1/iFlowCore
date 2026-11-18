@@ -1,0 +1,5 @@
+# AWS infrastructure for the iFlow Core sync API (infra/). Python 3.12 + Node.js 22 (the CDK CLI).
+aws-cdk-lib>=2.170,<3
+constructs>=10,<11
+boto3>=1.34,<2          # scripts/: secrets, DNS records
+cryptography>=43        # scripts/create_app_secret.py: Ed25519 signing key

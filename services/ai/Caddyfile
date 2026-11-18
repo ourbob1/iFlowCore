@@ -1,0 +1,32 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$RS_AI_DOMAIN} {
+	encode zstd gzip
+
+	# Receipts up to 25 MB (+ headroom); everything else is small JSON.
+	request_body {
+		max_size 26MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		-Server
+	}
+
+	reverse_proxy ai:8080 {
+		transport http {
+			read_timeout 300s
+			write_timeout 300s
+		}
+	}
+
+	log {
+		output stdout
+		format json
+		# Never log request bodies or auth headers.
+	}
+}

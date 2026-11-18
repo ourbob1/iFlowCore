@@ -1,0 +1,216 @@
+{
+  "jurisdiction": "US-CA",
+  "tax_year": 2025,
+  "currency": "USD",
+  "kind": "progressive",
+  "source": "FTB 2025 Form 540 Tax Rate Schedules; FTB standard deduction page",
+  "notes": "Exemption credits and other credits are not modeled. Mental Health Services Tax (1% over $1M) modeled as a surcharge. FTB instructs using 2025 tables for 2026 estimates.",
+  "standard_deduction": {
+    "single": 570600,
+    "married_separate": 570600,
+    "married_joint": 1141200,
+    "head_of_household": 1141200,
+    "qualifying_surviving_spouse": 1141200
+  },
+  "brackets": {
+    "single": [
+      [
+        0,
+        100
+      ],
+      [
+        1107900,
+        200
+      ],
+      [
+        2626400,
+        400
+      ],
+      [
+        4145200,
+        600
+      ],
+      [
+        5754200,
+        800
+      ],
+      [
+        7272400,
+        930
+      ],
+      [
+        37147900,
+        1030
+      ],
+      [
+        44577100,
+        1130
+      ],
+      [
+        74295300,
+        1230
+      ]
+    ],
+    "married_separate": [
+      [
+        0,
+        100
+      ],
+      [
+        1107900,
+        200
+      ],
+      [
+        2626400,
+        400
+      ],
+      [
+        4145200,
+        600
+      ],
+      [
+        5754200,
+        800
+      ],
+      [
+        7272400,
+        930
+      ],
+      [
+        37147900,
+        1030
+      ],
+      [
+        44577100,
+        1130
+      ],
+      [
+        74295300,
+        1230
+      ]
+    ],
+    "married_joint": [
+      [
+        0,
+        100
+      ],
+      [
+        2215800,
+        200
+      ],
+      [
+        5252800,
+        400
+      ],
+      [
+        8290400,
+        600
+      ],
+      [
+        11508400,
+        800
+      ],
+      [
+        14544800,
+        930
+      ],
+      [
+        74295800,
+        1030
+      ],
+      [
+        89154200,
+        1130
+      ],
+      [
+        148590600,
+        1230
+      ]
+    ],
+    "qualifying_surviving_spouse": [
+      [
+        0,
+        100
+      ],
+      [
+        2215800,
+        200
+      ],
+      [
+        5252800,
+        400
+      ],
+      [
+        8290400,
+        600
+      ],
+      [
+        11508400,
+        800
+      ],
+      [
+        14544800,
+        930
+      ],
+      [
+        74295800,
+        1030
+      ],
+      [
+        89154200,
+        1130
+      ],
+      [
+        148590600,
+        1230
+      ]
+    ],
+    "head_of_household": [
+      [
+        0,
+        100
+      ],
+      [
+        2217300,
+        200
+      ],
+      [
+        5253000,
+        400
+      ],
+      [
+        6771600,
+        600
+      ],
+      [
+        8380500,
+        800
+      ],
+      [
+        9899000,
+        930
+      ],
+      [
+        50520800,
+        1030
+      ],
+      [
+        60625100,
+        1130
+      ],
+      [
+        101041700,
+        1230
+      ]
+    ]
+  },
+  "surcharges": [
+    {
+      "name": "Mental Health Services Tax",
+      "rate_bp": 100,
+      "threshold": {
+        "default": 100000000
+      }
+    }
+  ]
+}

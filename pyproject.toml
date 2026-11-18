@@ -1,0 +1,93 @@
+[project]
+name = "ruby-soho"
+version = "0.13.0"
+description = "Operational command center and financial suite for independent gig workers"
+requires-python = ">=3.10"
+dependencies = [
+    "flet>=1.0,<2.0",
+    "flet-charts>=1.0,<2.0",
+    "flet-geolocator>=1.0,<2.0",
+    "platformdirs>=4.2,<5.0",
+    "pypdf>=5.0,<7.0",
+    "cryptography>=43,<49",          # AES-GCM field sealing (Flet ships Android/iOS wheels: 43.0.1, 48.0.0)
+    "tzdata>=2024.1",            # IANA timezones for zoneinfo: Windows, Android, iOS and browsers have no usable system copy
+]
+
+# `pip install -e .[desktop]` for local development / servers.
+[project.optional-dependencies]
+desktop = [
+    "sqlcipher3-binary>=0.5; sys_platform == 'linux'",
+    "sqlcipher3>=0.5; sys_platform == 'darwin' or sys_platform == 'win32'",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["live_format_check: let the app run its statement-format check after unlock (with a fake CDN)"]
+
+# ---------------------------------------------------------------------------
+# flet build configuration
+# ---------------------------------------------------------------------------
+[tool.flet]
+org = "dev.iflowcore"
+product = "iFlow Core"
+company = "iFlow Core"
+bundle_id = "dev.iflowcore.app"
+artifact = "iFlowCore"
+copyright = "Copyright (c) 2026 iFlow Core"
+
+[tool.flet.app]
+path = "."
+module = "main"
+# `flet build` packages the app directory; keep dev/server/user files out of every bundle.
+# (scripts/package_*.py go further and build from an allowlisted stage: build/stage/<target>.)
+exclude = ["venv", ".venv", "tests", "services", "api", "scripts", "docs", "build", "dist",
+           "Claude outputs", "requirements.txt", "requirements-dev.txt", "requirements-build.txt",
+           "README.md", ".env", ".pytest_cache", ".ruff_cache"]
+
+# Strip third-party test suites from bundled site-packages (mobile / flet build). Some wheels ship
+# them; cryptography's contain sample RSA private keys, which the packaging secret scan rightly refuses.
+[tool.flet.cleanup]
+package_files = ["tests", "tests/**", "**/tests", "**/tests/**", "**/test", "**/test/**"]
+
+# Per-target dependencies — `flet build <target>` appends these to [project].dependencies.
+# Desktop: SQLCipher is mandatory (the app refuses to open unencrypted in production).
+# Mobile: no SQLCipher wheel exists for Flet's mobile runtime, so the app uses
+# platform-protected SQLite + a Keychain/Keystore device key (core/security.py).
+# If a mobile SQLCipher wheel becomes available, add it here: the app detects it
+# and encrypts the existing database on next launch.
+[tool.flet.linux]
+dependencies = ["sqlcipher3-binary>=0.5"]
+categories = ["Office", "Finance"]
+
+[tool.flet.macos]
+dependencies = ["sqlcipher3>=0.5"]
+
+[tool.flet.windows]
+dependencies = ["sqlcipher3>=0.5"]
+
+[tool.flet.android]
+dependencies = ["flet-secure-storage>=1.0,<2.0"]
+# Play Store requires 64-bit; drop x86 emulators from release bundles.
+target_arch = ["arm64-v8a", "armeabi-v7a", "x86_64"]
+# Release signing: key_store/alias go here or in FLET_ANDROID_SIGNING_KEY_STORE / _KEY_ALIAS;
+# passwords ONLY via FLET_ANDROID_SIGNING_KEY_STORE_PASSWORD / FLET_ANDROID_SIGNING_KEY_PASSWORD.
+
+[tool.flet.ios]
+dependencies = ["flet-secure-storage>=1.0,<2.0"]
+
+# Location for trip detection. Background location is opt-in inside the app,
+# shown only after the prominent disclosure (Google Play policy).
+[tool.flet.android.permission]
+"android.permission.ACCESS_FINE_LOCATION" = true
+"android.permission.ACCESS_COARSE_LOCATION" = true
+"android.permission.ACCESS_BACKGROUND_LOCATION" = true
+"android.permission.FOREGROUND_SERVICE" = true
+"android.permission.FOREGROUND_SERVICE_LOCATION" = true
+"android.permission.POST_NOTIFICATIONS" = true
+"android.permission.INTERNET" = true
+
+[tool.flet.ios.info]
+NSLocationWhenInUseUsageDescription = "iFlow Core uses your location to detect drives and log business miles for your mileage deduction."
+NSLocationAlwaysAndWhenInUseUsageDescription = "With background detection on, iFlow Core logs drives even when the app is closed. Only trip distance and times are saved, never your route."
+UIBackgroundModes = ["location"]

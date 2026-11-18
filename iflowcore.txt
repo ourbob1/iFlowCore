@@ -1,0 +1,58 @@
+;;
+;; Domain:     iflowcore.com.
+;; Exported:   2026-09-27 16:45:33
+;;
+;; This file is intended for use for informational and archival
+;; purposes ONLY and MUST be edited before use on a production
+;; DNS server.  In particular, you must:
+;;   -- update the SOA record with the correct authoritative name server
+;;   -- update the SOA record with the contact e-mail address information
+;;   -- update the NS record(s) with the authoritative name servers for this domain.
+;;
+;; For further information, please consult the BIND documentation
+;; located on the following website:
+;;
+;; http://www.isc.org/
+;;
+;; And RFC 1035:
+;;
+;; http://www.ietf.org/rfc/rfc1035.txt
+;;
+;; Please note that we do NOT offer technical support for any use
+;; of this zone data, the BIND name server, or any other third-party
+;; DNS software.
+;;
+;; Use at your own risk.
+;; SOA Record
+iflowcore.com	3600	IN	SOA	albert.ns.cloudflare.com. dns.cloudflare.com. 2054219413 10000 2400 604800 3600
+
+;; NS Records
+iflowcore.com.	86400	IN	NS	albert.ns.cloudflare.com.
+iflowcore.com.	86400	IN	NS	luciana.ns.cloudflare.com.
+
+;; A Records
+autoconfig.iflowcore.com.	1	IN	A	74.208.31.218 ; cf_tags=cf-proxied:false
+iflowcore.com.	1	IN	A	216.250.119.42 ; cf_tags=cf-proxied:false
+autodiscover.iflowcore.com.	1	IN	A	74.208.31.218 ; cf_tags=cf-proxied:false
+box.iflowcore.com.	1	IN	A	74.208.31.218 ; cf_tags=cf-proxied:false
+mta-sts.iflowcore.com.	1	IN	A	74.208.31.218 ; cf_tags=cf-proxied:false
+www.iflowcore.com.	1	IN	A	216.250.119.42 ; cf_tags=cf-proxied:false
+
+;; CNAME Records
+_domainconnect.iflowcore.com.	1	IN	CNAME	_domainconnect.ionos.com. ; cf_tags=cf-proxied:true
+
+;; MX Records
+autoconfig.iflowcore.com.	1	IN	MX	0 .
+iflowcore.com.	1	IN	MX	10 box.iflowcore.com.
+autodiscover.iflowcore.com.	1	IN	MX	0 .
+mta-sts.iflowcore.com.	1	IN	MX	0 .
+www.iflowcore.com.	1	IN	MX	0 .
+
+;; SRV Records
+caldavs._tcp.iflowcore.com.	1	IN	SRV	0 0 443 box.somebeachbar.com.
+_carddavs._tcp.iflowcore.com.	1	IN	SRV	0 0 443 box.somebeachbar.com.
+
+;; TXT Records
+iflowcore.com.	1	IN	TXT	"v=spf1 mx -all"
+_dmarc.iflowcore.com.	1	IN	TXT	"v=DMARC1; p=quarantine; rua=mailto:info@iflowcore.com"
+mail._domainkey.iflowcore.com.	1	IN	TXT	"v=DKIM1; h=sha256; k=rsa; s=email; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuEu0NoQRLSk4NiSooqctki7I7xJOcpqCnuYLvJuQOnsIfQwEDiJ7+CyMSQAfo0u3TErftR0snfLyeixcBIhE6xyhPCcTVmNTKOPAvWOPXCClSCW4lpjgiXIZKTdmVrbLhgskKDDv0Y3GiNdRLlO5UlKMk9L3L1XBXRKqjC1DmPwqL6" "/4TB21Zz4lSQRgAIhfXFEg5c6cn9Or848Csm477aeriBt0AwhwTufst43c7CGHPoGAoLkSF0WXtDGl8owMScUuy+QRXfWnLQwIvcPq1QTPi0gl613WrrqFH3Dem9yD+lSAxUuMQ9iSTdvaGj9yCgl9Q2nXLWWowek0s/mmvQIDAQAB"

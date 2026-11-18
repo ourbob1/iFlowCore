@@ -1,0 +1,26 @@
+# Local development: PostgreSQL + the API. Codes are printed to the API log (console mailer).
+#   cd api && docker compose up --build
+#   then:  docker compose exec api alembic upgrade head   (dev also auto-creates tables)
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: iflow
+      POSTGRES_PASSWORD: iflow-dev-only
+      POSTGRES_DB: iflow
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "iflow"]
+      interval: 5s
+  api:
+    build: .
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      IFLOW_API_ENV: dev
+      IFLOW_API_DATABASE_URL: postgresql+psycopg://iflow:iflow-dev-only@db/iflow
+      IFLOW_API_MAIL_BACKEND: console
+      IFLOW_API_GOOGLE_CLIENT_IDS: ${IFLOW_API_GOOGLE_CLIENT_IDS:-}
+    ports: ["127.0.0.1:8000:8080"]
+volumes:
+  pgdata:

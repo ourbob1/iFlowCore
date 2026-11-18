@@ -1,0 +1,11 @@
+-r requirements.txt
+pytest>=8.0
+pytest-cov>=5.0
+fpdf2>=2.7        # generates real PDF statements in tests
+
+# AI service tests (tests/test_ai_service.py); the service's own runtime deps are in services/ai/requirements.txt
+pillow>=10.4
+pypdfium2>=4.30,<5.0
+
+# Account & sync API tests (tests/test_account_*.py); the service's runtime deps
+-r api/requirements.txt
